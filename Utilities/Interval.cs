@@ -23,6 +23,10 @@ public class Interval
 		return i;
 	}
 
+	/// <summary>
+	/// Takes in the interval that was returned by Start().
+	/// </summary>
+	/// <param name="interval"></param>
 	public static void Stop(Interval interval)
 	{
 		if(interval?.timer is null)
