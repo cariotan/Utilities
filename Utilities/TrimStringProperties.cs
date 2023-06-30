@@ -2,7 +2,7 @@
 
 namespace Utilities;
 
-public static partial class ExtensionMethods
+public static partial class U
 {
 	public static void TrimStringProperties(this object obj)
 	{

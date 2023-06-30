@@ -1,6 +1,6 @@
 namespace Utilities;
 
-public static class StringExtensions
+public static partial class U
 {
 	public static bool IsNullOrEmpty(this string str)
 	{
