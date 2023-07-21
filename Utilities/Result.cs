@@ -53,6 +53,28 @@ public class Result<T> : Result
 		}
 	}
 
+	public bool IsSuccess(out T value)
+	{
+		value = Value;
+		return IsSuccessful;
+	}
+
+	public bool IfNotSuccess(out T value)
+	{
+		value = Value;
+		return IsSuccessful is false;
+	}
+
+	public A IfSuccessful<A>(Func<T, A> action)
+	{
+		if(IsSuccessful)
+		{
+			return action(Value);
+		}
+
+		return default;
+	}
+
 	public async Task IfSuccessfulAsync(Func<T, Task> action)
 	{
 		if(IsSuccessful)
@@ -90,10 +112,24 @@ public class Result<T> : Result
 		}
 	}
 
-	public static implicit operator Result<T>(T value) => new() { IsSuccessful = true, Value = value };
+	public static implicit operator Result<T>(T value)
+	{
+		if(value == null)
+		{
+			throw new Exception("Value cannot be null.");
+		}
+
+		return new() { IsSuccessful = true, Value = value };
+	}
+
 	public static implicit operator Result<T>(bool value) => new() { IsSuccessful = value };
 	public static implicit operator Result<T>(Error error) => new() { IsSuccessful = false, ErrorMessage = error };
 	public static implicit operator Result<T>(List<Error> errors) => new() { IsSuccessful = false, ErrorMessages = errors };
+
+	public static implicit operator T(Result<T> v)
+	{
+		return v.Value;
+	}
 }
 
 public class Error
@@ -110,4 +146,12 @@ public class Error
 	public static implicit operator Error(string error) => new(error);
 	// https://stackoverflow.com/questions/751303/cannot-implicitly-convert-type-x-to-string-when-and-how-it-decides-that-it
 	public static implicit operator string(Error error) => error?.ToString();
+}
+
+public static partial class ExtensionClasses
+{
+	public static Error Error(string errorMessage)
+	{
+		return new Error(errorMessage);
+	}
 }
