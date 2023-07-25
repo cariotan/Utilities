@@ -114,11 +114,6 @@ public class Result<T> : Result
 
 	public static implicit operator Result<T>(T value)
 	{
-		if(value == null)
-		{
-			throw new Exception("Value cannot be null.");
-		}
-
 		return new() { IsSuccessful = true, Value = value };
 	}
 
