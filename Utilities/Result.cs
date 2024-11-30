@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Utilities;
+using System.Text.Json.Serialization;
 
 public class Result
 {
@@ -34,7 +32,7 @@ public class Result
 
 public class Result<T> : Result
 {
-	public T Value { get; init; }
+	public T Value { get; init; } = default!;
 	
 	public new static Result<T> Error(string error) => new() { IsSuccessful = false, ErrorMessage = error };
 	
@@ -65,7 +63,7 @@ public class Result<T> : Result
 		return IsSuccessful is false;
 	}
 
-	public A IfSuccessful<A>(Func<T, A> action)
+	public A? IfSuccessful<A>(Func<T, A> action)
 	{
 		if(IsSuccessful)
 		{
@@ -140,7 +138,7 @@ public class Error
 	
 	public static implicit operator Error(string error) => new(error);
 	// https://stackoverflow.com/questions/751303/cannot-implicitly-convert-type-x-to-string-when-and-how-it-decides-that-it
-	public static implicit operator string(Error error) => error?.ToString();
+	public static implicit operator string(Error error) => error.ToString();
 }
 
 public static partial class ExtensionClasses
