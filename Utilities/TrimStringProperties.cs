@@ -1,7 +1,5 @@
 ﻿using System.Reflection;
 
-namespace Utilities;
-
 public static partial class ExtensionClasses
 {
 	public static void TrimStringProperties(this object obj)
