@@ -1,9 +1,16 @@
 using System.Text.Json.Serialization;
 
+namespace Utilities;
+
 public class Result
 {
 	public bool IsSuccessful { get; init; }
 	public bool IsNotSuccessful => !IsSuccessful;
+
+	public Result()
+	{
+		// Required for deserialization.
+	}
 
 	[JsonIgnore]
 	public Error ErrorMessage
@@ -20,7 +27,7 @@ public class Result
 	public static Result True => new() { IsSuccessful = true };
 	public static Result False => new() { IsSuccessful = false };
 	public static Result Error(string error) => new() { IsSuccessful = false, ErrorMessage = error };
-	public static Result Errors(string error) => new() { IsSuccessful = false, ErrorMessages = new List<Error>{ new(error) } };
+	public static Result Errors(string error) => new() { IsSuccessful = false, ErrorMessages = new List<Error> { new(error) } };
 	public static Result Errors(IEnumerable<Error> errors) => new() { IsSuccessful = false, ErrorMessages = errors };
 	public static Result<T> Create<T>(T value) => value is null ? Result<T>.False : Success(value);
 	public static Result<T> Success<T>(T value) => new() { IsSuccessful = true, Value = value };
@@ -33,11 +40,16 @@ public class Result
 public class Result<T> : Result
 {
 	public T Value { get; init; } = default!;
-	
+
+	public Result()
+	{
+		// Required for deserialization.
+	}
+
 	public new static Result<T> Error(string error) => new() { IsSuccessful = false, ErrorMessage = error };
-	
+
 	// public static implicit operator Result<T>(Result r) => new() { IsSuccessful = r.IsSuccessful, ErrorMessage = r.ErrorMessage, ErrorMessages = r.ErrorMessages };
-	
+
 	public new static Result<T> True => new() { IsSuccessful = true };
 	public new static Result<T> False => new() { IsSuccessful = false };
 
@@ -45,7 +57,7 @@ public class Result<T> : Result
 
 	public void IfSuccessful(Action<T> action)
 	{
-		if(IsSuccessful)
+		if (IsSuccessful)
 		{
 			action(Value);
 		}
@@ -65,7 +77,7 @@ public class Result<T> : Result
 
 	public A? IfSuccessful<A>(Func<T, A> action)
 	{
-		if(IsSuccessful)
+		if (IsSuccessful)
 		{
 			return action(Value);
 		}
@@ -75,7 +87,7 @@ public class Result<T> : Result
 
 	public async Task IfSuccessfulAsync(Func<T, Task> action)
 	{
-		if(IsSuccessful)
+		if (IsSuccessful)
 		{
 			await action(Value);
 		}
@@ -88,7 +100,7 @@ public class Result<T> : Result
 
 	public void IfSuccessfulOrElse(Action<T> f1, Action<IEnumerable<Error>> f2)
 	{
-		if(IsSuccessful)
+		if (IsSuccessful)
 		{
 			f1(Value);
 		}
@@ -97,10 +109,10 @@ public class Result<T> : Result
 			f2(ErrorMessages.ToList());
 		}
 	}
-	
+
 	public async Task MatchAsync(Func<T, Task> f1, Action<IEnumerable<Error>> f2)
 	{
-		if(IsSuccessful)
+		if (IsSuccessful)
 		{
 			await f1(Value);
 		}
@@ -128,14 +140,25 @@ public class Result<T> : Result
 public class Error
 {
 	public string Message { get; init; }
+	public object ErrorObject { get; set; }
+
+	public Error()
+	{
+		// Required for deserialization.
+	}
 
 	public Error(string message)
 	{
 		Message = message;
 	}
 
+	public Error(object errorObject)
+	{
+		ErrorObject = errorObject;
+	}
+
 	public override string ToString() => Message;
-	
+
 	public static implicit operator Error(string error) => new(error);
 	// https://stackoverflow.com/questions/751303/cannot-implicitly-convert-type-x-to-string-when-and-how-it-decides-that-it
 	public static implicit operator string(Error error) => error.ToString();
