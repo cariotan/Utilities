@@ -89,7 +89,7 @@ public class Result<T> : Result
 	{
 		if (IsSuccessful)
 		{
-			await action(Value);
+			await action(Value).ConfigureAwait(false);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class Result<T> : Result
 	{
 		if (IsSuccessful)
 		{
-			await f1(Value);
+			await f1(Value).ConfigureAwait(false);
 		}
 		else
 		{
