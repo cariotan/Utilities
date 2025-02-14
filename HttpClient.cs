@@ -14,6 +14,5 @@ public static class HttpClient
 		};
 
 		httpClient = new System.Net.Http.HttpClient(handler);
-		httpClient.BaseAddress = new Uri(Config.Host);
 	}
 }
