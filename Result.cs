@@ -76,7 +76,7 @@ public class Result<T> : Result
 		return IsSuccessful is false;
 	}
 
-	public A? IfSuccessful<A>(Func<T, A> action)
+	public A IfSuccessful<A>(Func<T, A> action)
 	{
 		if (IsSuccessful)
 		{
