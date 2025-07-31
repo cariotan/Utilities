@@ -31,6 +31,7 @@ public class Result
 	public static Result Errors(IEnumerable<Error> errors) => new() { IsSuccessful = false, ErrorMessages = errors };
 	public static Result<T> Create<T>(T value) => value is null ? Result<T>.False : Success(value);
 	public static Result<T> Success<T>(T value) => new() { IsSuccessful = true, Value = value };
+	public static Result<T> Failed<T>(string errorMessage) => new() { IsSuccessful = false, Value = default, ErrorMessage = errorMessage };
 
 	public static implicit operator Result(bool value) => new() { IsSuccessful = value };
 	public static implicit operator Result(Error error) => new() { IsSuccessful = false, ErrorMessage = error };
