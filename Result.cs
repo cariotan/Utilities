@@ -6,6 +6,7 @@ public class Result
 {
 	public bool IsSuccessful { get; init; }
 	public bool IsNotSuccessful => !IsSuccessful;
+	public bool IsTrue => IsSuccessful;
 
 	public Result()
 	{
