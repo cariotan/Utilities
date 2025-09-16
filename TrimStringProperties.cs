@@ -6,22 +6,30 @@ public static partial class ExtensionClasses
 	{
 		PropertyInfo[] properties = obj.GetType().GetProperties();
 
-		foreach(PropertyInfo property in properties)
+		foreach (PropertyInfo property in properties)
 		{
-			if(property.PropertyType != typeof(string))
+			if (property.PropertyType != typeof(string))
+			{
+				continue;
+			}
+
+			if (!property.CanRead || !property.CanWrite)
 			{
 				continue;
 			}
 
 			string value = (string)property.GetValue(obj);
 
-			if(value == null)
+			if (value == null)
 			{
 				continue;
 			}
 
-			value = value.Trim();
-			property.SetValue(obj, value);
+			string trimmed = value.Trim();
+			if (trimmed != value) // only set if changed
+			{
+				property.SetValue(obj, trimmed);
+			}
 		}
 	}
 }
