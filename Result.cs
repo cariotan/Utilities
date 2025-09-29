@@ -25,6 +25,8 @@ public class Result
 	}
 	public IEnumerable<Error> ErrorMessages { get; init; } = new List<Error>();
 
+	public object ErrorObject { get; init; }
+
 	public static Result True => new() { IsSuccessful = true };
 	public static Result False => new() { IsSuccessful = false };
 	public static Result Error(string error) => new() { IsSuccessful = false, ErrorMessage = error };
@@ -152,6 +154,11 @@ public class Error
 	public Error(string message)
 	{
 		Message = message;
+	}
+	public Error(string message, object errorObject)
+	{
+		Message = message;
+		ErrorObject = errorObject;
 	}
 
 	public Error(object errorObject)
