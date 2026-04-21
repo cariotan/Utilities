@@ -83,6 +83,13 @@ public class Result<T> : Result
 		return IsSuccessful;
 	}
 
+	public bool IsSuccess(out T value, out string errorMessage)
+	{
+		value = Value;
+		errorMessage = ErrorMessage.ToString();
+		return false;
+	}
+
 	public bool IfNotSuccess(out T value)
 	{
 		value = Value;
