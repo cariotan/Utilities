@@ -8,7 +8,7 @@ public class Result
 	public bool IsNotSuccessful => !IsSuccessful;
 	public bool IsTrue => IsSuccessful;
 	
-	public string ExceptionSring => Exception.ToString();
+	public string ExceptionSring => Exception?.ToString() ?? "";
 
 	[JsonIgnore]
 	public Exception Exception { get; set; }
@@ -87,7 +87,7 @@ public class Result<T> : Result
 	{
 		value = Value;
 		errorMessage = ErrorMessage.ToString();
-		return false;
+		return IsSuccessful;
 	}
 
 	public bool IfNotSuccess(out T value)
